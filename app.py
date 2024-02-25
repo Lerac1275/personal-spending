@@ -4,6 +4,10 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 
+@st.cache_data()
+def dummy_data(): # A helper function for prototyping, reads in a dummy dataframe to avoid having to re-pull data during prototyping
+    return pd.read_pickle('../data/sample_data.pkl')
+
 @st.cache_data #input is a placeholder to be used when we want to re-pull data
 def get_data(input):
     # Create a connection object.
@@ -27,17 +31,18 @@ def get_data(input):
 
 if "input" not in st.session_state:
     st.session_state['input']=1
-
+# Ensures that data is only pulled from google API when the button is clicked (aside from when the app is first run. )
 refresh_data = st.button(label="Refresh Raw Data", type='primary')
 if refresh_data:
     st.session_state.input += 1
 
-df = get_data(st.session_state.input)
+# df = get_data(st.session_state.input) #Uncomment this to pull the real data from google sheet
+df = dummy_data()
 
-df.to_pickle("./data/sample_data.pkl")
+# df.to_pickle("./data/dummy_data.pkl")
 
 st.dataframe(df)
-# st.dataframe(df.dtypes)
+st.dataframe(df.dtypes)
 
 # Print results.
 # for row in df.itertuples():
