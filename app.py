@@ -3,10 +3,11 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
+import appUtilities as au
 
 @st.cache_data()
 def dummy_data(): # A helper function for prototyping, reads in a dummy dataframe to avoid having to re-pull data during prototyping
-    return pd.read_pickle('../data/sample_data.pkl')
+    return pd.read_pickle('./data/dummy_data.pkl')
 
 @st.cache_data #input is a placeholder to be used when we want to re-pull data
 def get_data(input):
@@ -43,6 +44,9 @@ df = dummy_data()
 
 st.dataframe(df)
 st.dataframe(df.dtypes)
+
+styled_df = au.create_main_table(df=df, reverse=False)
+st.dataframe(styled_df)
 
 # Print results.
 # for row in df.itertuples():
